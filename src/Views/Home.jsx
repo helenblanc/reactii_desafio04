@@ -25,7 +25,7 @@ async function apiPizzas() {
         const response = await fetch(url);
         //console.log('response: ', response.text())
         let dataJ = await response.text();
-        dataJ =  JSON.parse(dataJ)
+        dataJ = JSON.parse(dataJ)
         console.log('dataJ: ', dataJ)
         newData = dataJ.sort((a, b) => {
             //  ORDENAR POR NOMBRE DE LA A A LA Z
@@ -43,12 +43,12 @@ async function apiPizzas() {
 export const Home = () => {
     console.log('LOADING HOME...')
     // CARGANDO VARIABLE DATA GLOBAL
-    const { data, setData } = useContext(AppContext) 
+    const { data, setData } = useContext(AppContext)
     // CREANDO HOOK LOCAL ID
     const [id, setId] = useState("");
     console.log('CREATE HOOK PIZZAS')
     // CREANDO HOOK LOCAL DE COMPONENTE CHARACTERS
-    const [pizzas, setPizzas] = useState([])    
+    const [pizzas, setPizzas] = useState([])
     // CREANDO HOOK PARA RENDERIZAR 
     useEffect(() => {
         console.log('call apiPizza()')
@@ -67,7 +67,7 @@ export const Home = () => {
     // FUNCIÓN PARA REDIRECCIONAR DE FORMA PROGRAMATICA
     const navigate = useNavigate();
     const detail = (id) => {
-        navigate('/character/'+id);
+        navigate('/character/' + id);
     };
 
     /* FUNCIÓN QUE CREA UN CARD CON LOS DATOS EN PERSONAJE DE RICK Y MORTY*/
@@ -81,20 +81,23 @@ export const Home = () => {
         //console.log('load card: ', character)
         return (
             <Col key={pizza.id} className="col-6">
-                <Card  className='m-4 p-4'>
+                <Card className='m-4 p-4'>
                     <Card.Img variant="top" className='rounded' src={pizza.img} alt={pizza.name} />
                     <Card.Body >
                         <Card.Title className='text-uppercase text-secondary'>{pizza.name}</Card.Title>
                         <Card.Text>
                             <Row className='text-danger align-middle text-sm text-capitalize'>
-                                { ingredients }
+                                {ingredients}
                             </Row>
                             <Row className='text-lg'>
                                 <h4 className="text-center" >${pizza.price}</h4>
                             </Row>
                         </Card.Text>
-                        <Card.Link href="#">Card Link</Card.Link>
-                        <Card.Link href="#">Another Link</Card.Link>
+                        <div className='d-grid gap-2 col-6 mx-auto'>
+                            <Card.Link className='btn btn-primary' href="#">AGREGAR</Card.Link>
+                            <Card.Link className='btn btn-primary' href="#">DETALLE</Card.Link>
+                        </div>
+
                     </Card.Body>
                 </Card>
             </Col>);

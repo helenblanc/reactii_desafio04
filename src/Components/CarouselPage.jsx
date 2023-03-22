@@ -11,7 +11,7 @@ function CarouselPage() {
   return (
     <Carousel activeIndex={index} onSelect={handleSelect} className='mx-auto my-4' height={'100px'}>
       <Carousel.Item>
-        <img 
+        <img
           className="d-block w-100"
           src="http://localhost:3000/api/pizza1.PNG"
           alt="First slide"

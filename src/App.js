@@ -21,8 +21,8 @@ function App() {
     <AppContext.Provider value={sharedDataState}>
       <BrowserRouter>
         <Container>
-          <CarouselPage />
           <NavbarPage />
+          <CarouselPage />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/favorite" element={<Favorite />} />
