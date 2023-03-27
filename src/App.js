@@ -13,9 +13,9 @@ import NavbarPage from './Components/NavbarPage';
 import CarouselPage from './Components/CarouselPage';
 
 function App() {
-
-  const [data, setData] = useState({ 'characters': [], 'isData': false })
-  const sharedDataState = { data, setData }
+  // VARIABLE GLOBAL CARRITO
+  const [cart, setCart] = useState({ 'pizzas': {}, 'totalPago': 0, })
+  const sharedDataState = { cart, setCart }
 
   return (
     <AppContext.Provider value={sharedDataState}>
