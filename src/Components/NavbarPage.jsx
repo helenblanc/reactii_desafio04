@@ -22,12 +22,10 @@ export const NavbarPage = () => {
                     <NavLink className={setActiveClass} to="/" >
                         Home
                     </NavLink>
+                    <NavLink className={setActiveClass} to="/cart" >
+                        Cart
+                    </NavLink>
                 </div>
-                <div>                    <img
-                        className="d-block"
-                        src={logo}
-                        alt="logo"
-                    /></div>
             </Container>
         </Navbar>
     );

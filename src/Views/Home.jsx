@@ -50,7 +50,7 @@ export const Home = () => {
     // CREANDO HOOK LOCAL ID
     const [localCart, setLocalCart] = useState({ 'pizzas': [], 'quantity': 0, 'pay': 0 });
     console.log('CREATE HOOK PIZZAS')
-    // CREANDO HOOK LOCAL DE COMPONENTE CHARACTERS
+    // CREANDO HOOK LOCAL DE COMPONENTE PIZZAS
     const [pizzas, setPizzas] = useState([])
     // CREANDO HOOK PARA RENDERIZAR 
     useEffect(() => {
@@ -60,7 +60,7 @@ export const Home = () => {
             const arr = await apiPizzas();
             //ACTUALIZACIÓN ESTADO VARIABLE PIZZAS
             setPizzas(arr);
-            //setLocalCart({ 'pizzas': [], 'quantity': 0, 'pay': 0 });
+            setLocalCart(cart);
         };
 
         fetchData();
@@ -68,18 +68,12 @@ export const Home = () => {
 
     console.log('Pizzas', pizzas)
 
-    // FUNCIÓN PARA REDIRECCIONAR DE FORMA PROGRAMATICA
-    /*const navigate = useNavigate();
-    const detail = (id) => {
-        navigate('/character/' + id);
-    };*/
-
     /* FUNCIÓN QUE CREA UN CARD CON LOS DATOS EN PERSONAJE DE RICK Y MORTY*/
     const card = (pizza, index) => {
         // LISTA DE INGREDIENTES
         const ingredients = pizza.ingredients.map(function (ingredient, index) {
             // GENERACIÓN HTML LISTA INGREDIENTES
-            return <Col className='col-12 bg-white my-1'> {ingredient} </Col>
+            return <Col className='col-12 bg-white my-1 text-capitalize'> {ingredient} </Col>
             //return <></>
         });
 
@@ -95,8 +89,8 @@ export const Home = () => {
                         </Card.Text>
                         <Row className='row'>
                             <Col className='col-lg my-1 mx-1'>
-                                <Button onClick={(e) => { click(e.target, pizza, index) }} className='btn btn-primary icon bi-cart-plus text-right'></Button>
-                                <Card.Link className='btn btn-danger icon bi-cart-dash-fill text-right' href="#"></Card.Link>
+                                <Button onClick={(e) => { add(e.target, pizza, index) }} className='btn btn-primary icon bi-cart-plus text-right mx-2'></Button>
+                                <Button onClick={(e) => { dash(e.target, pizza, index) }} className='btn btn-danger icon bi-cart-dash-fill text-right mx-2'></Button>
                             </Col>
                             <Col>
                                 <OverlayTrigger
@@ -105,10 +99,12 @@ export const Home = () => {
                                     placement="top"
                                     overlay={
                                         <Popover id={`popover-${pizza.name}${index}`}>
-                                            <Popover.Header id={`popover-title-${pizza.name}${index}`} as="h3" className='text-white bg-dark'>INGREDIENTES</Popover.Header>
+                                            <Popover.Header id={`popover-title-${pizza.name}${index}`} as="h3" className='text-white bg-dark text-uppercase'>{pizza.name}</Popover.Header>
                                             <Popover.Body id={`popover-body-${pizza.name}${index}`}>
-                                                <Row className='row text-danger text-sm text-capitalize'>
+                                                <Row className='row text-danger text-sm'>
                                                     <Col className='col-12 bg-white my-1'> <img src={pizza.img} alt="" className='col-12' /> </Col>
+                                                    <span className='text-dark text-justify my-2'>{pizza.desc}</span>
+                                                    <strong>INGREDIENTES:</strong>
                                                     {ingredients}
                                                 </Row>
 
@@ -125,46 +121,78 @@ export const Home = () => {
             </Col >);
     };
 
-    // FUNCIÓN QUE PERMITE ACTUALIZAR EL ESTADO DE UN OBJETO EN LA VARIABLE LOCAL Y GLOBAL
-    const click = (target, pizza, index) => {
-        //console.log('target: ', target);
-        console.log('click: ', pizza);
-        console.log('localCart', localCart);
-        let newD = { 'pizzas': [], 'quantity': 0, 'pay': 0 }
-        //if (localCart === undefined) {
-        //newD.pizzas = [{ 'name': pizza.name, 'price': pizza.price, 'quantity': 1 }];
-        //} else {
-        let arr = localCart.pizzas.slice(0);
-        let add = false;
-        localCart.pizzas.forEach(function (e, index) {
-            if (e.name = pizza.name) {
-                console.log('e.name: ', e.name);
-                console.log('pizza.name: ', pizza.name);
-                console.log('e.quantitye: ', e.quantity);
-                e.quantity = e.quantity + 1;
-                console.log('e.quantitye: ', e.quantity);
-                add = true;
+    // FUNCIÓN PARA REDIRECCIONAR DE FORMA PROGRAMATICA
+    const navigate = useNavigate();
+    const cartRedirect = () => {
+        navigate('/cart');
+    };
+
+    // FUNCIÓN QUE PERMITE ACTUALIZAR EL CART
+    const updateCart = (pizza, cart, add) => {
+        // SE CREA COPIA DE LISTADO DE PIZZAS
+        let pizzas = cart.pizzas.slice(0);
+        // VARIABLE PARA DETERMINAR SI SE ENCONTRO LA PIZZA DENTRO DEL CARRO
+        let finded = false;
+        // RECORRIENDO LISTA COPIA DE PIZZAS
+        pizzas.forEach(function (e) {
+            //SI EXISTE SE AGREGA O QUITA A LA CANTIDAD DE PIZZAS
+            if (e.name === pizza.name) {
+                if (add) {
+                    e.quantity = e.quantity + 1;
+                } else {
+                    e.quantity = e.quantity - 1;
+                }
+                finded = true;
             }
         });
-        if (!add) {
-            // COPIA DE LA LISTA LOCAL
-            arr.push({ 'name': pizza.name, 'price': pizza.price, 'quantity': 1 });
+        // SE AGREGA PIZZA A CARRITO DE NO EXISTIR
+        if (!finded && add) {
+            pizzas.push({ 'name': pizza.name, 'price': pizza.price, 'quantity': 1, 'img': pizza.img });
         }
-        newD.pizzas = arr;
-        //}
+        // ELIMINAR PIZZAS CON CANTIDAD 0
+        let arr = [];
+        pizzas.forEach(function (e) {
+            if (e.quantity >= 0) {
+                arr.push(e);
+            }
+        });
+        // CALCULAR MONTO A PAGAR Y CANTIDAD DE PIZZAS
         let quantity = 0;
         let pay = 0;
-        newD.pizzas.forEach(function (e, index) {
+        arr.forEach(function (e) {
             quantity = quantity + e.quantity;
-            pay = pay + (e.quantity * parseInt(e.price));
+            pay = pay + (e.quantity * e.price);
         });
-        console.log('quantity:', quantity)
-        console.log('pay:', pay)
-        newD.quantity = quantity;
-        newD.pay = pay;
-        setLocalCart(newD);
-        console.log('newD', newD);
-        console.log('localCart', localCart);
+        const newCart = { 'pizzas': arr, 'quantity': quantity, 'pay': pay };
+        return newCart;
+    };
+
+    // FUNCIÓN QUE PERMITE AGREGAR UNA PIZZA AL CART
+    const add = (target, pizza, index) => {
+        console.log('pizzas: ', pizzas);
+        let cart = { 'pizzas': [], 'quantity': 0, 'pay': 0 }
+        if (localCart !== undefined) {
+            cart = localCart;
+        }
+        console.log('cart: ', cart);
+        const newCart = updateCart(pizza, cart, true);
+        setLocalCart(newCart);
+        setCart(newCart);
+        console.log('cart: ', cart);
+    };
+
+    // FUNCIÓN QUE PERMITE QUITAR UNA PIZZA AL CART
+    const dash = (target, pizza, index) => {
+        console.log('pizzas: ', pizzas);
+        let cart = { 'pizzas': [], 'quantity': 0, 'pay': 0 }
+        if (localCart !== undefined) {
+            cart = localCart;
+        }
+        console.log('cart: ', cart);
+        const newCart = updateCart(pizza, cart, false);
+        setLocalCart(newCart);
+        setCart(newCart);
+        console.log('cart: ', cart);
     };
 
     /* FUNCIÓN QUE CREARA LOS CARDS */
@@ -191,10 +219,12 @@ export const Home = () => {
                     {cards(pizzas)}
                 </Form>
             </div>
-            <div class="fixed-bottom">
-                <Row >
-                    <a className="m-1 p-1"  href=""><span style={{ minWidth: "150px" }} className='icon bi-cart-plus btn btn-warning mt-1 '><span className="">{localCart.quantity}</span></span></a>
-                    <a className="m-1 p-1" href=""><span style={{ minWidth: "150px" }} className='icon bi-credit-card btn btn-warning mt-1'><span className="">{localCart.pay}</span></span></a>
+            <div class="fixed-bottom m-4">
+                <Row style={{ width: "250px" }} className="btn btn-warning">
+                    <a style={{ width: "150px" }} onClick={(e) => { cartRedirect() }}>
+                        <span style={{ width: "150px" }} className='col-12 icon bi-cart-plus mx-3'><span className="mx-2">{localCart.quantity}</span></span>
+                        <span style={{ width: "150px" }} className='col-12 icon bi-credit-card mx-3'><span className="mx-2">{localCart.pay}</span></span>
+                    </a>
                 </Row>
             </div>
         </div>

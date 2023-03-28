@@ -1,8 +1,9 @@
 # REACTI_DESAFIO04
 
-React JS II Desafio 03, consumo api rest con personajes de rick y morty utilizando userParam, useNavigate, activate.
+React JS II Desafio 04, Mamma Mia!
 
-Cada card tiene un botón favorito para agregar y quitar en la sección y un botón con el detalle del personaje.
+Cada card tiene un botón favorito para agregar y pizzas, se tiene tanto en el menú como en la parte inferior un enlace para poder ver el carro de compra. Se hace uso de useContext, useEffect, 
+useState, useNavigate dentro de la aplicación.
 
 ## INSTALAR LIBRERIAS
 npm install
@@ -10,9 +11,12 @@ npm install
 ## DESPLEGAR
 npm run start
 
-![rick-y-morti](rick-y-morti.PNG)
+![01](docs/img/01.PNG)
 
-![rick-y-morti2](rick-y-morti2.PNG)
+![02](docs/img/02.PNG)
 
-![rick-y-morti3](rick-y-morti3.PNG)
+![03](docs/img/03.PNG)
+
+![04](docs/img/04.PNG)
+
 
