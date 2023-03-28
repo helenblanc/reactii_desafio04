@@ -19,4 +19,5 @@ npm run start
 
 ![04](docs/img/04.PNG)
 
+QUEDA PENDIENTE EL VIDEO
 
