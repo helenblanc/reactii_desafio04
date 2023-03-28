@@ -19,5 +19,6 @@ npm run start
 
 ![04](docs/img/04.PNG)
 
-QUEDA PENDIENTE EL VIDEO
+## PRESENTACIÓN
+[VIDEO](https://youtu.be/7cb355k665I)
 
